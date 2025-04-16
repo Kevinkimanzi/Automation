@@ -1,0 +1,158 @@
+image: cypress/browsers:latest
+
+options:
+  size: 2x
+  max-parallel: 9
+  max-time: 50
+
+definitions:
+  caches:
+    cypress: ~/.cache/Cypress
+
+  steps:
+    - step: &install-deps
+        name: "Install Dependencies"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "📦 Installing dependencies..."
+          - npm ci
+          - echo "📥 Ensuring Cypress is installed..."
+          - npx cypress install
+
+    - step: &cypress-parallel-1
+        name: "Cypress Test - Employee Transition"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for Employee Transition..."
+          - npx cypress run --spec "cypress/integration/Employee Transition/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-2
+        name: "Cypress Test - HRSelfService"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for HRSelfService..."
+          - echo "Listing directory content for verification..."
+          - ls -la cypress/integration/ || echo "Directory not found"
+          - ls -la cypress/integration/HRSelfService/ || echo "Directory not found"
+          - npx cypress run --spec "cypress/integration/HRSelfService/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-3
+        name: "Cypress Test - My work"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for My work..."
+          - npx cypress run --spec "cypress/integration/My work/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-4
+        name: "Cypress Test - PayrollCentral"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for PayrollCentral..."
+          - npx cypress run --spec "cypress/integration/PayrollCentral/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-5
+        name: "Cypress Test - Setttings"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for Settings..."
+          - npx cypress run --spec "cypress/integration/Setttings/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-6
+        name: "Cypress Test - Team central"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for Team central..."
+          - npx cypress run --spec "cypress/integration/Team central/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-7
+        name: "Cypress Test - adminCentral"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for adminCentral..."
+          - npx cypress run --spec "cypress/integration/adminCentral/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-8
+        name: "Cypress Test - loginPage"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for loginPage..."
+          - npx cypress run --spec "cypress/integration/loginPage/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+    - step: &cypress-parallel-9
+        name: "Cypress Test - Assets"
+        caches:
+          - node
+          - cypress
+        script:
+          - echo "🧪 Running tests for Assets..."
+          - npx cypress run --spec "cypress/integration/Assets/**/*.js" || true
+        artifacts:
+          - cypress/videos/**
+          - cypress/screenshots/**
+          - cypress/reports/**
+
+
+pipelines:
+  branches:
+    kilonzi2:
+      - step: *install-deps
+      - parallel:
+          - step: *cypress-parallel-1
+          - step: *cypress-parallel-2
+          - step: *cypress-parallel-3
+          - step: *cypress-parallel-4
+          - step: *cypress-parallel-5
+          - step: *cypress-parallel-6
+          - step: *cypress-parallel-7
+          - step: *cypress-parallel-8
+          - step: *cypress-parallel-9
